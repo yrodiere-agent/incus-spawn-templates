@@ -15,6 +15,7 @@ tools:
   - opencode:
       model: anthropic/claude-opus-4-6
       small-model: anthropic/claude-haiku-4-5
+  - atlassian-mcp
 skills:
   - yrodiere/claude-skills
 files:
