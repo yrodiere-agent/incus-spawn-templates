@@ -13,6 +13,7 @@ tools:
   - zsh
   - sdkman-mvnd
   - bob
+  - bob-settings
   - gh
 packages:
   - tig
