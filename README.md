@@ -43,6 +43,7 @@ All templates inherit the `tpl-java` chain (JDK 25, Maven, Claude Code, GitHub C
 
 | Tool | Description |
 |------|-------------|
+| `pinchtab` | [PinchTab](https://github.com/pinchtab/pinchtab) browser control for agents — headless Chromium, the `pinchtab` skill (params: `allowed_domains`, `mcp`) |
 | `zsh` | Zsh as default shell |
 
 ## Contributing
