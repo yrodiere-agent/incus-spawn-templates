@@ -43,7 +43,19 @@ All templates inherit the `tpl-java` chain (JDK 25, Maven, Claude Code, GitHub C
 
 | Tool | Description |
 |------|-------------|
+| `atlassian-mcp` | Atlassian MCP server for Jira and Confluence |
+| `code-assistant` | Smart code assistant launcher — resumes the most recent AI coding session |
+| `firewalld` | Firewall with permissive defaults for container networking |
+| `incus` | Nested Incus daemon for recursive development |
+| `opencode` | Open source AI coding agent (opencode.ai) |
 | `pinchtab` | [PinchTab](https://github.com/pinchtab/pinchtab) browser control for agents — headless Chromium, the `pinchtab` skill (params: `allowed_domains`, `mcp`) |
+| `podman-full` | Podman with compose and permissive short image name resolution |
+| `sdkman` | SDKMAN! — manager for JVM ecosystem tools |
+| `sdkman-java` | OpenJDK installed via SDKMAN! |
+| `sdkman-jbang` | JBang — run Java scripts and apps without build tools |
+| `sdkman-maven` | Apache Maven installed via SDKMAN! |
+| `sdkman-mvnd` | Maven Daemon (mvnd) for faster Maven builds |
+| `sdkman-quarkus` | Quarkus CLI installed via SDKMAN! |
 | `zsh` | Zsh as default shell |
 
 ## Contributing
