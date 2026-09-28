@@ -1,9 +1,8 @@
 name: quarkus
-description: Quarkus development (JDK + Maven + Quarkus source)
+description: Quarkus development box
 parent: tpl-mydev
 repos:
   - url: https://github.com/quarkusio/quarkus.git
-    path: ~/quarkus
     prime: mvn -B clean install -Dquickly
   - url: https://github.com/quarkusio/quarkus-quickstarts
     path: ~/quarkus-quickstarts
