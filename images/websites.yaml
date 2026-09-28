@@ -3,6 +3,7 @@ description: Hibernate Website Dev
 parent: tpl-mydev
 tools:
   - podman
+  - pinchtab
 repos:
   - url: https://github.com/hibernate/hibernate.org.git
     path: ~/hibernate.org

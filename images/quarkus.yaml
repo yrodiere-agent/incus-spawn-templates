@@ -1,9 +1,14 @@
 name: quarkus
-description: Quarkus development (JDK + Maven + Quarkus source)
+description: Quarkus development box
 parent: tpl-mydev
+tools:
+  - sdkman-mvnd
 repos:
   - url: https://github.com/quarkusio/quarkus.git
-    path: ~/quarkus
-    prime: mvn -B clean install -Dquickly
+    # Resolve dependencies breadth-first, in parallel: through the isx proxy every cached
+    # artifact is confirmed with Maven Central, which depth-first resolution pays one
+    # round trip at a time. Measured 16s instead of 44s resolving a Quarkus app on mvnd.
+    # mvnd reads resolver settings only from its command line, not MAVEN_OPTS.
+    prime: mvnd -b singlethreaded -Dquickly -Daether.dependencyCollector.impl=bf
   - url: https://github.com/quarkusio/quarkus-quickstarts
     path: ~/quarkus-quickstarts
