@@ -1,0 +1,15 @@
+name: incus-spawn-container
+description: No-VM dev of Incus Spawn (isx)
+parent: tpl-mydev
+packages:
+  - copr-cli
+  - lxc-devel
+  - openssl
+repos:
+  - url: https://github.com/Sanne/incus-spawn/
+    path: ~/incus-spawn
+    prime: mvnd clean package -DskipTests
+  - url: https://github.com/yrodiere/incus-spawn-templates/
+    path: ~/incus-spawn-templates
+  - url: https://github.com/yrodiere/incus-spawn-images/
+    path: ~/incus-spawn-images
