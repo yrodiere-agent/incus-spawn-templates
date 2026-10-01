@@ -22,6 +22,7 @@ files:
     owner: agentuser
 
 env:
-  - export JAVA_TOOL_OPTIONS="-Djavax.net.ssl.trustStore=/etc/pki/java/cacerts"
+  - name: JAVA_TOOL_OPTIONS
+    value: "-Djavax.net.ssl.trustStore=/etc/pki/java/cacerts"
 
 verify: test -d /home/agentuser/.sdkman
