@@ -6,6 +6,6 @@ packages:
 
 run:
   - |
-    chsh -s /usr/bin/zsh agentuser
+    usermod -s /usr/bin/zsh agentuser
 
 verify: getent passwd agentuser | grep -q '/usr/bin/zsh'
