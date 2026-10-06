@@ -273,31 +273,7 @@ Auth types:
 
 ## Environment Variables
 
-Shared model for image `env` and tool `env`.
-
-### Structured form
-
-```yaml
-env:
-  - name: MAVEN_HOME
-    value: /opt/maven
-    # strategy: set (default) | set-if-unset | prepend | append
-    # separator: " " (default, for prepend/append)
-```
-
-| Strategy | Behavior |
-|---|---|
-| `set` | Unconditional assignment. Two tools setting the same var to different values → build error. |
-| `set-if-unset` | Only assign if not already defined. |
-| `prepend` | Prepend to existing value using separator. |
-| `append` | Append to existing value using separator. |
-
-### Raw form (backward-compatible)
-
-```yaml
-env:
-  - export FOO=bar    # written verbatim, no conflict detection
-```
+See [Environment Variables](https://github.com/Sanne/incus-spawn#environment-variables) in the incus-spawn README.
 
 ---
 
