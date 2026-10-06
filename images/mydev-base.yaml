@@ -8,7 +8,7 @@ tools:
   - sdkman-java
   - sdkman-maven
   - sdkman-quarkus
-  - podman-full
+  - podman-custom
   - vscode-remote
   - zsh
   - sdkman-mvnd
