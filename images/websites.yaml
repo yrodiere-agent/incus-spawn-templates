@@ -2,7 +2,7 @@ name: websites
 description: Hibernate Website Dev
 parent: tpl-mydev
 tools:
-  - podman
+  - podman-custom
   - pinchtab
 repos:
   - url: https://github.com/hibernate/hibernate.org.git

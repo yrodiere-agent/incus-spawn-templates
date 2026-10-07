@@ -2,7 +2,7 @@ name: hibernate-search
 description: Hibernate Search development (JDK + Maven + source)
 parent: tpl-mydev
 tools:
-  - podman
+  - podman-custom
 repos:
   - url: https://github.com/hibernate/hibernate-search.git
     path: ~/hibernate-search
