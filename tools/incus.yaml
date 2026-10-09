@@ -6,7 +6,9 @@ packages:
   - btrfs-progs
 
 run:
-  - systemctl enable --now incus
+  - systemctl enable incus
+  - systemctl start incus-startup 2>/dev/null || true
+  - systemctl start incus
   - usermod -aG incus-admin agentuser
   - |
     for i in $(seq 1 30); do
