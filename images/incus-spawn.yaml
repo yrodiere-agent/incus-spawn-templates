@@ -12,14 +12,27 @@ repos:
   - url: https://github.com/Sanne/incus-spawn/
     path: ~/incus-spawn
     prime: >-
-      ~/incus-spawn/install.sh
-      && isx init </dev/null
-      && sed -i
+      set -e;
+      echo '==> [1/5] Building and installing isx (install.sh)...';
+      ~/incus-spawn/install.sh;
+      echo '==> [2/5] Initializing isx (isx init)...';
+      isx init </dev/null;
+      echo '==> [3/5] Verifying incusd is running...';
+      if ! systemctl is-active --quiet incus; then
+        echo 'ERROR: incusd is not running after isx init';
+        journalctl --no-pager -u incus -u incus-startup --since '10 min ago' | tail -80;
+        sudo coredumpctl list --no-pager 2>/dev/null || true;
+        exit 1;
+      fi;
+      echo '==> [4/5] Configuring placeholder credentials...';
+      sed -i
       -e '0,/apiKey: ""/s//apiKey: "placeholder"/'
       -e 's/token: ""/token: "placeholder"/'
       -e 's|^searchPaths: \[\]|searchPaths:\n- ~/incus-spawn-templates|'
-      ~/.config/incus-spawn/config.yaml
-      && isx proxy install </dev/null
+      ~/.config/incus-spawn/config.yaml;
+      echo '==> [5/5] Installing isx proxy (isx proxy install)...';
+      isx proxy install </dev/null;
+      echo '==> All priming steps completed successfully'
   - url: https://github.com/yrodiere/incus-spawn-templates/
     path: ~/incus-spawn-templates
   - url: https://github.com/yrodiere/incus-spawn-images/
