@@ -7,7 +7,9 @@ tools:
   #- idea-backend:
   #    memory: 8g
   - code-assistant:
-      default: claude
+      default: claude:claude-opus-4-6
+      # Codex: Sol for capable everyday coding at lower cost; Astra for demanding work.
+      choices: "claude:claude-opus-4-6,codex:gpt-6.1-sol,codex:gpt-6-astra,opencode:anthropic/claude-opus-4-6,bob"
   - claude:
       model: claude-opus-4-6
       attribution-commit: ""

@@ -5,6 +5,7 @@ default-action: code-assistant
 tools:
   - code-assistant:
       default: bob
+      choices: bob
 env:
   - name: GIT_AUTHOR_EMAIL
     value: yrodiere@ibm.com
