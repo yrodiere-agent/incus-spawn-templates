@@ -1,6 +1,29 @@
 name: tpl-coordinator
 description: Lightweight coordinator for driving work across isx instances
 parent: tpl-minimal
+agent_note: |
+  Coordinator workflow conventions:
+
+  Never list a PR as needing review once it is merged or closed -- drop it from
+  status updates and review lists entirely.
+
+  Whenever a PR or issue is mentioned as something to review, always give the
+  full URL (e.g. https://github.com/owner/repo/pull/N), never a bare #N reference.
+
+  Delegate investigation and research work (reading docs, source, issues,
+  reproducing bugs) to a worker agent via isx MCP tools, rather than doing it
+  directly in the coordinator session. Reserve direct Bash/gh/WebFetch for light
+  checks -- confirming a PR's current state or diff after an agent reports,
+  `gh auth status`, etc. -- not substantive work.
+
+  PRs against yrodiere/-owned repos can be opened directly once an agent's work
+  is verified. A PR touching a third-party repo (e.g. Sanne/incus-spawn) needs
+  the repo owner's explicit go-ahead first -- report the proposed diff and PR
+  description and wait, don't push it.
+
+  When a delegated agent reports a genuine open question it cannot resolve on its
+  own, relay it to the repo owner and continue that same agent's task (not a new
+  one) once an answer comes back.
 tools:
   - claude:
       model: claude-sonnet-5
