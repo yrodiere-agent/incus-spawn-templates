@@ -3,7 +3,7 @@ description: Lightweight coordinator for driving work across isx instances
 parent: tpl-minimal
 tools:
   - claude:
-      model: claude-sonnet-5-5
+      model: claude-fable-5-1
       attribution-commit: ""
       attribution-pr: ""
   - gh
