@@ -5,9 +5,14 @@ tools:
   - podman-custom
 host-resources:
   - source: ~/workspaces/product/hibernate-orm-product
-    path: ~/hibernate-orm-product
+    path: ~/.host-repos/hibernate-orm-product
     mode: overlay
   - source: ~/workspaces/product/hibernate-product-vex
-    path: ~/hibernate-product-vex
+    path: ~/.host-repos/hibernate-product-vex
     mode: overlay
+repos:
+  - url: file:///home/agentuser/.host-repos/hibernate-orm-product
+    path: ~/hibernate-orm-product
+  - url: file:///home/agentuser/.host-repos/hibernate-product-vex
+    path: ~/hibernate-product-vex
 workdir: ~/hibernate-orm-product
