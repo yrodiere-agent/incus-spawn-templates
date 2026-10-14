@@ -14,3 +14,9 @@ repos:
   - url: file:///home/agentuser/.host-repos/hibernate-product-vex
     path: ~/hibernate-product-vex
 workdir: ~/hibernate-orm-product
+agent_note: |
+  Repos under `~/.host-repos/` are snapshots from the host, taken when the
+  container was last built/started. Before doing real work, check each repo's
+  last commit date (`git -C ~/REPO log -1 --format=%ci`). If any repo's last
+  commit is more than 7 days old, stop and ask the user to confirm — they may
+  need to refresh the host checkout and rebuild.
