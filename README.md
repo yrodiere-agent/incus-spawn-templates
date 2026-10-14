@@ -22,7 +22,7 @@ isx branch tpl-quarkus my-feature
 
 ## Templates
 
-All templates inherit the `tpl-java` chain (JDK 25, Maven, Claude Code, GitHub CLI, tmux) through two intermediate base layers:
+Most templates inherit the `tpl-java` chain (JDK 25, Maven, Claude Code, GitHub CLI, tmux) through two intermediate base layers:
 
 | Template | Parent | Description |
 |----------|--------|-------------|
@@ -38,6 +38,25 @@ All templates inherit the `tpl-java` chain (JDK 25, Maven, Claude Code, GitHub C
 | `tpl-incus-spawn` | `tpl-dev` | incus-spawn itself — recursive development with Incus and COPR tools |
 | `tpl-tools` | `tpl-dev` | Development tools (shell-tools, git-tools, activity-report) |
 | `tpl-websites` | `tpl-dev` | Hibernate websites (hibernate.org, in.relation.to, beanvalidation.org) |
+
+### Coordinator
+
+The `tpl-coordinator` template is a lightweight instance for driving work across other isx instances via the isx MCP server. It inherits directly from `tpl-minimal` (no Java/Maven overhead) and carries Claude Code (Sonnet), GitHub CLI, Atlassian MCP, and Zsh.
+
+| Template | Parent | Description |
+|----------|--------|-------------|
+| `tpl-coordinator` | `tpl-minimal` | Lightweight coordinator for driving work across isx instances |
+
+Build and branch with `--mcp-client` to enable MCP access:
+
+```shell
+isx build tpl-coordinator
+isx branch coord --from tpl-coordinator --proxy-only --mcp-client
+```
+
+The `--mcp-client` flag registers the isx MCP server with Claude Code inside the instance, giving it access to tools like `create_instance`, `delegate`, `wait_any`, `get_diff`, and `destroy_instance`. The `--proxy-only` flag restricts network access to the proxy (Claude API + GitHub), which is all a coordinator needs.
+
+Once inside, Claude Code can use the `/mcp__isx__coordinate` prompt for the full coordination playbook, or drive instances directly through the MCP tools.
 
 ## Tools
 
