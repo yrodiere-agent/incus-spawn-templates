@@ -58,6 +58,35 @@ All templates inherit the `tpl-java` chain (JDK 25, Maven, Claude Code, GitHub C
 | `sdkman-quarkus` | Quarkus CLI installed via SDKMAN! |
 | `zsh` | Zsh as default shell |
 
+### Code assistant choices
+
+Configure the first-launch menu through tool parameters in an image definition:
+
+```yaml
+tools:
+  - code-assistant:
+      default: claude:opus
+      choices: "claude:opus,claude:sonnet,codex,opencode:anthropic/claude-sonnet-4-6,bob"
+```
+
+`choices` is a comma-separated list with no spaces. Each entry is an assistant
+name, optionally followed by `:` and its model ID or alias. Only installed
+assistants appear. Entries without a model use the assistant's existing model
+configuration; omitting `choices` offers all installed assistants this way.
+Bob supports only the plain `bob` entry because its CLI has no model flag.
+`default` prefers a listed combination (or all entries for that assistant when
+it has no model suffix); it does not add a choice to the list.
+
+The menu combines these choices with discovered working directories and skips
+prompting when only one combination is available. Subsequent launches resume
+the most recent session with its saved model. Run `code-assistant --new` inside
+the container to choose a new assistant/model session instead.
+
+The launcher and parameter configuration are written when the tool is installed.
+Updating this definition does not update them on restart of an existing
+container; existing containers need the tool reinstalled, or a new branch from
+a rebuilt template.
+
 ## Contributing
 
 To add a new template, create a YAML file in `images/` — see the [incus-spawn documentation](https://github.com/Sanne/incus-spawn) for the image definition format. Custom tools go in `tools/`.

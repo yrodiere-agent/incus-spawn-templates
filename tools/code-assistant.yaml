@@ -5,7 +5,14 @@ packages:
 parameters:
   default:
     type: string
-    description: "Default code assistant for first launch (claude, bob, or opencode)"
+    description: "Default assistant or assistant:model for first launch"
+    pattern: "^(claude|codex|pi|bob|opencode)(:[A-Za-z0-9_./:@+-]+)?$"
+    optional: true
+    reconfigurable: true
+  choices:
+    type: string
+    description: "Comma-separated assistant[:model] choices, e.g. claude:opus,claude:sonnet,codex:gpt-5.3-codex,opencode:anthropic/claude-sonnet-4-6,bob. Omit to offer all installed assistants with their configured models. Bob does not support model selection."
+    pattern: "^(claude|codex|pi|bob|opencode)(:[A-Za-z0-9_./:@+-]+)?(,(claude|codex|pi|bob|opencode)(:[A-Za-z0-9_./:@+-]+)?)*$"
     optional: true
     reconfigurable: true
 run:
@@ -13,8 +20,12 @@ run:
     cat > /usr/local/bin/code-assistant << 'SCRIPT'
     #!/bin/bash
     # code-assistant: resumes the most recent AI coding session across
-    # claude, bob, and opencode. On first launch, prompts to pick a
-    # tool and working directory (skipped if there is only one choice).
+    # installed assistants. On first launch (or with --new), prompts to
+    # pick an assistant/model and working directory.
+    case "${1:-}" in
+      ""|--new) ;;
+      *) echo "Usage: code-assistant [--new]" >&2; exit 2 ;;
+    esac
 
     DEFAULT_TOOL=$(cat ~/.config/code-assistant-default 2>/dev/null)
     : "${DEFAULT_TOOL:=claude}"
@@ -39,11 +50,16 @@ run:
     launch_bob()     { bob chat --resume --auto-approve || bob chat --auto-approve; }
     launch_opencode(){ opencode --continue || opencode; }
 
-    start_claude()  { claude; }
-    start_codex()   { codex; }
-    start_pi()      { pi; }
-    start_bob()     { bob chat --auto-approve; }
-    start_opencode(){ opencode; }
+    start_assistant() {
+      local selection=$1 tool=${1%%:*} model=""
+      local -a args=()
+      [[ "$selection" == *:* ]] && model=${selection#*:}
+      [ -n "$model" ] && args+=(--model "$model")
+      case "$tool" in
+        bob) bob chat --auto-approve ;;
+        *) "$tool" "${args[@]}" ;;
+      esac
+    }
 
     # ── Find the most recent session across all installed tools ─────
     best_tool="" best_dir="" best_ts=0
@@ -105,7 +121,7 @@ run:
     done
 
     # ── Resume the most recent session ──────────────────────────────
-    if [ -n "$best_tool" ]; then
+    if [ "${1:-}" != --new ] && [ -n "$best_tool" ]; then
       cd "$best_dir" || true
       "launch_$best_tool"
       exit $?
@@ -118,39 +134,73 @@ run:
     done < <(find ~ -maxdepth 2 -name '.git' -type d 2>/dev/null | sort)
     [ ${#REPOS[@]} -eq 0 ] && REPOS+=("$(pwd)")
 
-    # Skip prompt if there is only one choice
-    if [ ${#TOOLS[@]} -eq 1 ] && [ ${#REPOS[@]} -le 1 ]; then
-      [ ${#REPOS[@]} -eq 1 ] && cd "${REPOS[0]}"
-      "start_${TOOLS[0]}"
-      exit $?
+    # Only offer configured combinations whose assistant is installed.
+    declare -a SELECTIONS
+    choices=$(cat ~/.config/code-assistant-choices 2>/dev/null)
+    if [ -z "$choices" ]; then
+      SELECTIONS=("${TOOLS[@]}")
+    else
+      IFS=',' read -r -a configured <<< "$choices"
+      for selection in "${configured[@]}"; do
+        tool=${selection%%:*}
+        case "$tool" in
+          claude|codex|pi|bob|opencode) ;;
+          *) echo "Ignoring unknown assistant: $tool" >&2; continue ;;
+        esac
+        if [[ "$tool" == bob && "$selection" == *:* ]]; then
+          echo "Ignoring $selection: Bob has no model selection flag." >&2
+          continue
+        fi
+        for installed in "${TOOLS[@]}"; do
+          if [ "$tool" = "$installed" ]; then
+            SELECTIONS+=("$selection")
+            break
+          fi
+        done
+      done
+    fi
+    if [ ${#SELECTIONS[@]} -eq 0 ]; then
+      echo "No configured code assistant choices are available." >&2
+      exit 1
     fi
 
-    # Build the options list; put the default first
-    declare -a OPT_LABELS OPT_TOOLS OPT_DIRS
+    declare -a OPT_LABELS OPT_SELECTIONS OPT_DIRS
     default_dir=$(pwd)
     add_option() {
-      local t=$1 r=$2 n
-      n=$(basename "$r")
-      OPT_LABELS+=("$t  $n  ($r)")
-      OPT_TOOLS+=("$t")
+      local selection=$1 r=$2 label=$1
+      [[ "$selection" != *:* ]] && label="$selection (configured model)"
+      OPT_LABELS+=("$label  $(basename "$r")  ($r)")
+      OPT_SELECTIONS+=("$selection")
       OPT_DIRS+=("$r")
     }
 
-    # Default choice first
-    for r in "${REPOS[@]}"; do
-      [ "$r" = "$default_dir" ] && { add_option "$DEFAULT_TOOL" "$r"; break; }
-    done
-    # Remaining combinations
-    for t in "${TOOLS[@]}"; do
-      for r in "${REPOS[@]}"; do
-        # Skip if already added as default
-        [ "$t" = "$DEFAULT_TOOL" ] && [ "$r" = "$default_dir" ] && continue
-        add_option "$t" "$r"
+    # Prefer the exact default combination, or its assistant when no
+    # model was specified. Preserve parameter order within each group.
+    for preferred in yes no; do
+      for selection in "${SELECTIONS[@]}"; do
+        match=no
+        if [ "$selection" = "$DEFAULT_TOOL" ] ||
+           { [[ "$DEFAULT_TOOL" != *:* ]] && [ "${selection%%:*}" = "$DEFAULT_TOOL" ]; }; then
+          match=yes
+        fi
+        [ "$match" = "$preferred" ] || continue
+        for r in "${REPOS[@]}"; do
+          [ "$r" = "$default_dir" ] && add_option "$selection" "$r"
+        done
+        for r in "${REPOS[@]}"; do
+          [ "$r" != "$default_dir" ] && add_option "$selection" "$r"
+        done
       done
     done
 
+    if [ ${#OPT_LABELS[@]} -eq 1 ]; then
+      cd "${OPT_DIRS[0]}" || exit 1
+      start_assistant "${OPT_SELECTIONS[0]}"
+      exit $?
+    fi
+
     echo ""
-    echo "  Pick a code assistant and working directory:"
+    echo "  Pick a code assistant, model, and working directory:"
     echo ""
     for i in "${!OPT_LABELS[@]}"; do
       if [ "$i" -eq 0 ]; then
@@ -163,21 +213,28 @@ run:
     printf "  Choice [1]: "
     read -r choice
     [ -z "$choice" ] && choice=1
-    idx=$((choice - 1))
+    if [[ ! "$choice" =~ ^[0-9]{1,6}$ ]]; then
+      echo "  Invalid choice." >&2
+      exit 1
+    fi
+    idx=$((10#$choice - 1))
 
     if [ "$idx" -lt 0 ] || [ "$idx" -ge "${#OPT_LABELS[@]}" ]; then
       echo "  Invalid choice."
       exec bash --login
     fi
 
-    cd "${OPT_DIRS[$idx]}" || true
-    "start_${OPT_TOOLS[$idx]}"
+    cd "${OPT_DIRS[$idx]}" || exit 1
+    start_assistant "${OPT_SELECTIONS[$idx]}"
     SCRIPT
     chmod +x /usr/local/bin/code-assistant
     d='${param_default}'
     case "$d" in '${param_'*) d=claude ;; esac
     mkdir -p /home/agentuser/.config
     echo "$d" > /home/agentuser/.config/code-assistant-default
+    choices='${param_choices}'
+    case "$choices" in '${param_'*) choices='' ;; esac
+    printf '%s\n' "$choices" > /home/agentuser/.config/code-assistant-choices
     chown -R agentuser:agentuser /home/agentuser/.config
 actions:
   - label: "Code Assistant"
