@@ -2,25 +2,28 @@ name: tpl-coordinator
 description: Lightweight coordinator for driving work across isx instances
 parent: tpl-minimal
 agent_note: |
-  When authoring templates in incus-spawn-templates, follow these conventions
-  (see AGENTS.md "Template authoring conventions" for full details):
+  Coordinator workflow conventions:
 
-  Host-only repos (VPN/credential-gated, no container network access): stage with
-  `host-resources` `mode: overlay` at `~/.host-repos/<name>`, then clone via
-  `repos:` with `url: file:///home/agentuser/.host-repos/<name>`. This gives full
-  isx repo integration instead of a raw mount. Such templates inherit from
-  `tpl-dev-secure`. See `hibernate-orm-product.yaml`.
+  Never list a PR as needing review once it is merged or closed -- drop it from
+  status updates and review lists entirely.
 
-  Any host-only-repo template needs an `agent_note` telling the agent to check
-  each host repo's last commit date and confirm with the user if any is >7 days old.
+  Whenever a PR or issue is mentioned as something to review, always give the
+  full URL (e.g. https://github.com/owner/repo/pull/N), never a bare #N reference.
 
-  Don't add `podman-custom` to templates inheriting `podman` from `tpl-dev-base` --
-  they conflict on `DOCKER_HOST`.
+  Delegate investigation and research work (reading docs, source, issues,
+  reproducing bugs) to a worker agent via isx MCP tools, rather than doing it
+  directly in the coordinator session. Reserve direct Bash/gh/WebFetch for light
+  checks -- confirming a PR's current state or diff after an agent reports,
+  `gh auth status`, etc. -- not substantive work.
 
-  Build-test new templates with `isx build <template>` on real Incus -- YAML
-  validation alone misses real failures.
+  PRs against yrodiere/-owned repos can be opened directly once an agent's work
+  is verified. A PR touching a third-party repo (e.g. Sanne/incus-spawn) needs
+  the repo owner's explicit go-ahead first -- report the proposed diff and PR
+  description and wait, don't push it.
 
-  Branch from `upstream/main`, not the fork's own `main`, when working on this repo.
+  When a delegated agent reports a genuine open question it cannot resolve on its
+  own, relay it to the repo owner and continue that same agent's task (not a new
+  one) once an answer comes back.
 tools:
   - claude:
       model: claude-sonnet-5
