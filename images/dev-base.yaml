@@ -1,5 +1,5 @@
-name: tpl-mydev-base
-description: Base for tpl-mydev, with the slow, hopefully rarely-updated part of setup.
+name: tpl-dev-base
+description: Base for tpl-dev, with the slow, hopefully rarely-updated part of setup.
 parent: tpl-minimal
 tools:
   #- tmux

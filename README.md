@@ -26,18 +26,18 @@ All templates inherit the `tpl-java` chain (JDK 25, Maven, Claude Code, GitHub C
 
 | Template | Parent | Description |
 |----------|--------|-------------|
-| `tpl-mydev-base` | `tpl-java` | Base dev environment: Podman, IntelliJ IDEA backend, Gradle |
-| `tpl-mydev` | `tpl-mydev-base` | Personal dev environment with Zsh, host resources, settings |
-| `tpl-quarkus` | `tpl-mydev` | Quarkus + quickstarts source |
+| `tpl-dev-base` | `tpl-java` | Base dev environment: Podman, IntelliJ IDEA backend, Gradle |
+| `tpl-dev` | `tpl-dev-base` | Personal dev environment with Zsh, host resources, settings |
+| `tpl-quarkus` | `tpl-dev` | Quarkus + quickstarts source |
 | `tpl-quarkus-aot` | `tpl-quarkus` | Quarkus AOT experiments (includes Hibernate ORM and Models) |
-| `tpl-quarkus-infra` | `tpl-mydev` | Quarkus infrastructure projects (lottery, bot, search, GitHub app/action/api) |
-| `tpl-hibernate-orm` | `tpl-mydev` | Hibernate ORM source, Podman |
+| `tpl-quarkus-infra` | `tpl-dev` | Quarkus infrastructure projects (lottery, bot, search, GitHub app/action/api) |
+| `tpl-hibernate-orm` | `tpl-dev` | Hibernate ORM source, Podman |
 | `tpl-hibernate-reactive` | `tpl-hibernate-orm` | Hibernate Reactive source (includes ORM) |
-| `tpl-wildfly` | `tpl-mydev` | WildFly and WildFly Core source |
-| `tpl-tamboui` | `tpl-mydev` | TamboUI TUI framework source, selected skills |
-| `tpl-incus-spawn` | `tpl-mydev` | incus-spawn itself — recursive development with Incus and COPR tools |
-| `tpl-tools` | `tpl-mydev` | Development tools (shell-tools, git-tools, activity-report) |
-| `tpl-websites` | `tpl-mydev` | Hibernate websites (hibernate.org, in.relation.to, beanvalidation.org) |
+| `tpl-wildfly` | `tpl-dev` | WildFly and WildFly Core source |
+| `tpl-tamboui` | `tpl-dev` | TamboUI TUI framework source, selected skills |
+| `tpl-incus-spawn` | `tpl-dev` | incus-spawn itself — recursive development with Incus and COPR tools |
+| `tpl-tools` | `tpl-dev` | Development tools (shell-tools, git-tools, activity-report) |
+| `tpl-websites` | `tpl-dev` | Hibernate websites (hibernate.org, in.relation.to, beanvalidation.org) |
 
 ## Tools
 

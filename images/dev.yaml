@@ -1,6 +1,6 @@
-name: tpl-mydev
+name: tpl-dev
 description: My own dev environment
-parent: tpl-mydev-base
+parent: tpl-dev-base
 default-action: code-assistant
 tools:
   # idea-backend — disabled until mkdir permission issue is resolved

@@ -1,6 +1,6 @@
 name: incus-spawn-container
 description: No-VM dev of Incus Spawn (isx)
-parent: tpl-mydev
+parent: tpl-dev
 packages:
   - copr-cli
   - lxc-devel

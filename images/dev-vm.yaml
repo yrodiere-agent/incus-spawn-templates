@@ -1,4 +1,4 @@
-name: tpl-mydev-vm
+name: tpl-dev-vm
 description: My own dev environment (VM)
-parent: tpl-mydev
+parent: tpl-dev
 type: vm

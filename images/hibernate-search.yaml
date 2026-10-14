@@ -1,6 +1,6 @@
 name: hibernate-search
 description: Hibernate Search development (JDK + Maven + source)
-parent: tpl-mydev
+parent: tpl-dev
 tools:
   - podman-custom
 repos:
