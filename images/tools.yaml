@@ -1,6 +1,6 @@
 name: tools
 description: Development Tools
-parent: tpl-mydev
+parent: tpl-dev
 repos:
   - url: https://github.com/yrodiere/shell-tools/
     path: ~/shell-tools

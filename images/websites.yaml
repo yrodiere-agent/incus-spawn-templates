@@ -1,6 +1,6 @@
 name: websites
 description: Hibernate Website Dev
-parent: tpl-mydev
+parent: tpl-dev
 tools:
   - podman-custom
   - pinchtab

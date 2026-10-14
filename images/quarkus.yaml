@@ -1,6 +1,6 @@
 name: quarkus
 description: Quarkus development box
-parent: tpl-mydev
+parent: tpl-dev
 tools:
   - sdkman-mvnd
 repos:

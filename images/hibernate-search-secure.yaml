@@ -1,6 +1,6 @@
 name: hibernate-search-secure
 description: Hibernate Search development, secure (no AI coding tools except Bob)
-parent: tpl-mydev-secure
+parent: tpl-dev-secure
 tools:
   - podman-custom
 repos:
