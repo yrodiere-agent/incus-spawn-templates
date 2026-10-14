@@ -1,6 +1,26 @@
 name: incus-spawn
 description: Recursive Development of Incus Spawn (isx)
 parent: tpl-dev-vm
+agent_note: |
+  When authoring templates in ~/incus-spawn-templates, follow these conventions
+  (see AGENTS.md "Template authoring conventions" for full details):
+
+  Host-only repos (VPN/credential-gated, no container network access): stage with
+  `host-resources` `mode: overlay` at `~/.host-repos/<name>`, then clone via
+  `repos:` with `url: file:///home/agentuser/.host-repos/<name>`. This gives full
+  isx repo integration instead of a raw mount. Such templates inherit from
+  `tpl-dev-secure`. See `hibernate-orm-product.yaml`.
+
+  Any host-only-repo template needs an `agent_note` telling the agent to check
+  each host repo's last commit date and confirm with the user if any is >7 days old.
+
+  Don't add `podman-custom` to templates inheriting `podman` from `tpl-dev-base` --
+  they conflict on `DOCKER_HOST`.
+
+  Build-test new templates with `isx build <template>` on real Incus -- YAML
+  validation alone misses real failures.
+
+  Branch from `upstream/main`, not the fork's own `main`, when working on this repo.
 packages:
   - copr-cli
   - lxc-devel
