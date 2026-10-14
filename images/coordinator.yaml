@@ -9,6 +9,7 @@ tools:
   - gh
   - atlassian-mcp
   - zsh
+default-action: claude
 packages:
   - iptables-nft
   - jq
