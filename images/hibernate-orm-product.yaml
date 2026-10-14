@@ -1,8 +1,6 @@
 name: hibernate-orm-product
 description: Hibernate ORM Product development, secure (no AI coding tools except Bob)
 parent: tpl-dev-secure
-tools:
-  - podman-custom
 host-resources:
   - source: ~/workspaces/product/hibernate-orm-product
     path: ~/.host-repos/hibernate-orm-product
