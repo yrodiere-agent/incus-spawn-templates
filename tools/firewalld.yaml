@@ -8,3 +8,5 @@ packages:
 run:
   - systemctl enable --now firewalld
   - firewall-cmd --set-default-zone=trusted
+
+ready: systemctl is-active firewalld
