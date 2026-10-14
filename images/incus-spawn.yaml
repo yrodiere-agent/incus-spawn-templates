@@ -29,6 +29,7 @@ repos:
       -e '0,/apiKey: ""/s//apiKey: "placeholder"/'
       -e 's/token: ""/token: "placeholder"/'
       -e 's|^searchPaths: \[\]|searchPaths:\n- ~/incus-spawn-templates|'
+      -e '$a\host-ca:\n  propagate: true'
       ~/.config/incus-spawn/config.yaml;
       echo '==> [5/5] Installing isx proxy (isx proxy install)...';
       isx proxy install </dev/null;
