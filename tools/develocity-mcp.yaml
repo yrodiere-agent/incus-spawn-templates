@@ -1,0 +1,45 @@
+name: develocity-mcp
+description: Develocity MCP server for build scans and test history
+proxy:
+  config-namespace: develocity
+  configuration:
+    commonhaus-access-key:
+      config-path: "commonhausAccessKey"
+      description: "Develocity access key for develocity.commonhaus.dev (read-only)"
+      secret: true
+      help:
+        - "Create a read-only access key at develocity.commonhaus.dev:"
+        - "  Administration > Access keys, or ask an admin."
+        - ""
+        - "Required permissions (read-only — never grant publishScan"
+        - "or readAndWriteBuildCacheData):"
+        - "  viewScan"
+        - "  accessBuildDataViaApiAndMcp"
+        - ""
+        - "Optional, for cross-project analytics and cache reads:"
+        - "  readAccessAllBuildDataWithOrWithoutAssociatedProject"
+        - "  readBuildCacheData"
+        - ""
+        - "Press Enter to skip if you have no access to this instance."
+    quarkus-access-key:
+      config-path: "quarkusAccessKey"
+      description: "Develocity access key for ge.quarkus.io (read-only)"
+      secret: true
+      help:
+        - "Create a read-only access key at ge.quarkus.io:"
+        - "  Administration > Access keys, or ask an admin."
+        - ""
+        - "Same permissions as above. Press Enter to skip if you"
+        - "have no access to this instance."
+  auth:
+    - domains:
+        - develocity.commonhaus.dev
+      type: bearer
+      token: "${commonhaus-access-key}"
+    - domains:
+        - ge.quarkus.io
+      type: bearer
+      token: "${quarkus-access-key}"
+run_as_user:
+  - '/home/agentuser/.local/bin/claude mcp add -t http -s user develocity-commonhaus https://develocity.commonhaus.dev/mcp -H "Authorization: Bearer placeholder"'
+  - '/home/agentuser/.local/bin/claude mcp add -t http -s user develocity-quarkus https://ge.quarkus.io/mcp -H "Authorization: Bearer placeholder"'
