@@ -5,32 +5,29 @@ proxy:
   configuration:
     commonhaus-access-key:
       config-path: "commonhausAccessKey"
-      description: "Develocity access key for develocity.commonhaus.dev (read-only)"
+      description: "Develocity access key for develocity.commonhaus.dev"
       secret: true
       help:
-        - "Access keys inherit their owning account's permissions —"
-        - "they cannot be scoped independently. For read-only access,"
-        - "ask a Develocity admin to create a dedicated service account"
-        - "with a custom role granting only:"
-        - "  viewScan"
-        - "  accessBuildDataViaApiAndMcp"
+        - "The Develocity MCP server is a read-only query interface —"
+        - "it never publishes scans or writes cache data, regardless"
+        - "of what the underlying access key could do via the REST API."
         - ""
-        - "Optional, for cross-project analytics and cache reads:"
+        - "Your account needs the accessBuildDataViaApiAndMcp permission"
+        - "(included in the Developer role)."
+        - "For cross-project analytics, also: "
         - "  readAccessAllBuildDataWithOrWithoutAssociatedProject"
-        - "  readBuildCacheData"
         - ""
-        - "Then generate an access key for that account"
-        - "(My settings > Access keys > Generate)."
+        - "Generate a key at My settings > Access keys > Generate."
         - ""
         - "Press Enter to skip if you have no access to this instance."
     quarkus-access-key:
       config-path: "quarkusAccessKey"
-      description: "Develocity access key for ge.quarkus.io (read-only)"
+      description: "Develocity access key for ge.quarkus.io"
       secret: true
       help:
-        - "Same setup as above: use a key from a dedicated read-only"
-        - "service account. Press Enter to skip if you have no access"
-        - "to this instance."
+        - "Same as above — any key with accessBuildDataViaApiAndMcp"
+        - "works. Press Enter to skip if you have no access to this"
+        - "instance."
   auth:
     - domains:
         - develocity.commonhaus.dev
