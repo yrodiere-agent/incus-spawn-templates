@@ -8,11 +8,10 @@ proxy:
       description: "Develocity access key for develocity.commonhaus.dev (read-only)"
       secret: true
       help:
-        - "Create a read-only access key at develocity.commonhaus.dev:"
-        - "  Administration > Access keys, or ask an admin."
-        - ""
-        - "Required permissions (read-only — never grant publishScan"
-        - "or readAndWriteBuildCacheData):"
+        - "Access keys inherit their owning account's permissions —"
+        - "they cannot be scoped independently. For read-only access,"
+        - "ask a Develocity admin to create a dedicated service account"
+        - "with a custom role granting only:"
         - "  viewScan"
         - "  accessBuildDataViaApiAndMcp"
         - ""
@@ -20,17 +19,18 @@ proxy:
         - "  readAccessAllBuildDataWithOrWithoutAssociatedProject"
         - "  readBuildCacheData"
         - ""
+        - "Then generate an access key for that account"
+        - "(My settings > Access keys > Generate)."
+        - ""
         - "Press Enter to skip if you have no access to this instance."
     quarkus-access-key:
       config-path: "quarkusAccessKey"
       description: "Develocity access key for ge.quarkus.io (read-only)"
       secret: true
       help:
-        - "Create a read-only access key at ge.quarkus.io:"
-        - "  Administration > Access keys, or ask an admin."
-        - ""
-        - "Same permissions as above. Press Enter to skip if you"
-        - "have no access to this instance."
+        - "Same setup as above: use a key from a dedicated read-only"
+        - "service account. Press Enter to skip if you have no access"
+        - "to this instance."
   auth:
     - domains:
         - develocity.commonhaus.dev
