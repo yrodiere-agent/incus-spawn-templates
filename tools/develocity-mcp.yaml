@@ -8,16 +8,21 @@ proxy:
       description: "Develocity access key for develocity.commonhaus.dev"
       secret: true
       help:
-        - "The Develocity MCP server is a read-only query interface —"
-        - "it never publishes scans or writes cache data, regardless"
-        - "of what the underlying access key could do via the REST API."
-        - ""
         - "Your account needs the accessBuildDataViaApiAndMcp permission"
         - "(included in the Developer role)."
-        - "For cross-project analytics, also: "
+        - "For cross-project analytics, also:"
         - "  readAccessAllBuildDataWithOrWithoutAssociatedProject"
         - ""
         - "Generate a key at My settings > Access keys > Generate."
+        - ""
+        - "Note: the proxy injects this credential for all HTTPS"
+        - "requests to the domain, not just MCP calls. Projects in"
+        - "these templates gate Develocity publishing on"
+        - "isAuthenticated() (a client-side check for a local key),"
+        - "so builds will not publish scans through the proxy."
+        - "Until isx supports path-scoped credential injection,"
+        - "avoid adding this tool to templates whose projects use"
+        - "the Develocity default (always-publish)."
         - ""
         - "Press Enter to skip if you have no access to this instance."
     quarkus-access-key:
@@ -25,9 +30,8 @@ proxy:
       description: "Develocity access key for ge.quarkus.io"
       secret: true
       help:
-        - "Same as above — any key with accessBuildDataViaApiAndMcp"
-        - "works. Press Enter to skip if you have no access to this"
-        - "instance."
+        - "Same as above. Press Enter to skip if you have no access"
+        - "to this instance."
   auth:
     - domains:
         - develocity.commonhaus.dev
