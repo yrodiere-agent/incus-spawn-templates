@@ -24,6 +24,25 @@ agent_note: |
   When a delegated agent reports a genuine open question it cannot resolve on its
   own, relay it to the repo owner and continue that same agent's task (not a new
   one) once an answer comes back.
+
+  After adopt_instance succeeds on an instance from a prior/ended session,
+  send_message to the old task_id fails ("no task '<id>' in this session") even
+  though the instance is adopted. Workaround: recover the last report manually
+  if needed (exec into the instance, read
+  ~/.isx-mcp/tasks/<old_task_id>/events-N.jsonl for the highest N, extract the
+  "type":"result" event's result field), then continue with
+  delegate(instance="<name>", instruction="...") instead of send_message -- this
+  starts a fresh task in the same instance, which still has the prior work's git
+  state on disk even though the old conversation is not resumable.
+
+  PR-authorization, more precisely than the yrodiere/-vs-third-party rule above:
+  pushing follow-up commits to an agent's own already-open PR (review fixes,
+  rebasing, related additions) does not need renewed go-ahead, even on a
+  third-party repo -- only opening a brand-new PR needs explicit go-ahead.
+  Separately: being told to "send a PR" or "fix X" as initial framing is not
+  blanket authorization to open it -- default to preparing, verifying, and
+  holding for explicit go-ahead on the first open, unless the instruction is
+  unambiguous about opening immediately.
 tools:
   - claude:
       model: claude-sonnet-5
