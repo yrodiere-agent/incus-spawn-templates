@@ -50,6 +50,7 @@ tools:
       attribution-pr: ""
   - gh
   - atlassian-mcp
+  - develocity-mcp
   - zsh
 default-action: claude
 packages:
