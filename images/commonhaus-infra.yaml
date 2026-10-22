@@ -1,41 +1,22 @@
 name: commonhaus-infra
 description: Commonhaus Foundation infrastructure, secure (no AI coding tools except Bob)
 parent: tpl-dev-secure
-host-resources:
-  - source: ~/workspaces/infra/project-hibernate
-    path: ~/.host-repos/project-hibernate
-    mode: overlay
-  - source: ~/workspaces/infra/commonhaus-automation
-    path: ~/.host-repos/commonhaus-automation
-    mode: overlay
-  - source: ~/workspaces/infra/commonhaus-handbook
-    path: ~/.host-repos/commonhaus-handbook
-    mode: overlay
-  - source: ~/workspaces/infra/foundation-internal
-    path: ~/.host-repos/foundation-internal
-    mode: overlay
-  - source: ~/workspaces/infra/project-commonhaus
-    path: ~/.host-repos/project-commonhaus
-    mode: overlay
-  - source: ~/workspaces/infra/sponsors
-    path: ~/.host-repos/sponsors
-    mode: overlay
 repos:
-  - url: file:///home/agentuser/.host-repos/project-hibernate
+  - host-source: ~/workspaces/infra/project-hibernate
     path: ~/project-hibernate
-  - url: file:///home/agentuser/.host-repos/commonhaus-automation
+  - host-source: ~/workspaces/infra/commonhaus-automation
     path: ~/commonhaus-automation
-  - url: file:///home/agentuser/.host-repos/commonhaus-handbook
+  - host-source: ~/workspaces/infra/commonhaus-handbook
     path: ~/commonhaus-handbook
-  - url: file:///home/agentuser/.host-repos/foundation-internal
+  - host-source: ~/workspaces/infra/foundation-internal
     path: ~/foundation-internal
-  - url: file:///home/agentuser/.host-repos/project-commonhaus
+  - host-source: ~/workspaces/infra/project-commonhaus
     path: ~/project-commonhaus
-  - url: file:///home/agentuser/.host-repos/sponsors
+  - host-source: ~/workspaces/infra/sponsors
     path: ~/sponsors
 agent_note: |
-  Repos under `~/.host-repos/` are snapshots from the host, taken when the
-  container was last built/started. Before doing real work, check each repo's
-  last commit date (`git -C ~/REPO log -1 --format=%ci`). If any repo's last
-  commit is more than 7 days old, stop and ask the user to confirm — they may
-  need to refresh the host checkout and rebuild.
+  Repos cloned from the host were exported at build time: all local branches and
+  tags are present, including unpushed history, but commits pushed to the host
+  after the build are not. Check each repo's last commit date
+  (`git -C ~/REPO log -1 --format=%ci`). If any repo's last commit is more than
+  7 days old, stop and ask the user to confirm — they may need to rebuild.
