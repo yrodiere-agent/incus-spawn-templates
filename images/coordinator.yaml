@@ -7,6 +7,11 @@ agent_note: |
   Never list a PR as needing review once it is merged or closed -- drop it from
   status updates and review lists entirely.
 
+  Before reporting a PR's status (e.g. calling it "open" or listing it as
+  needing review), verify its current state via `gh pr view <url> --json
+  state,mergedAt` rather than assuming it is still in the state it was last seen
+  in -- PRs opened earlier in a session may have been merged or closed since.
+
   Whenever a PR or issue is mentioned as something to review, always give the
   full URL (e.g. https://github.com/owner/repo/pull/N), never a bare #N reference.
 
