@@ -27,6 +27,7 @@ repos:
       echo '==> [4/5] Configuring placeholder credentials...';
       sed -i
       -e 's/^claude: {}/claude:\n  apiKey: "placeholder"/'
+      -e 's/^bob: {}/bob:\n  apiKey: "placeholder"\n  licenseConsent: true/'
       -e 's/token: ""/token: "placeholder"/'
       -e 's|^searchPaths: \[\]|searchPaths:\n- ~/incus-spawn-templates|'
       -e '$a\host-ca:\n  propagate: true'
