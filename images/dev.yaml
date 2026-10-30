@@ -15,8 +15,7 @@ tools:
       attribution-commit: ""
       attribution-pr: ""
       editor-mode: vim
-  # headroom — disabled until Sanne/incus-spawn#670 is fixed
-  #- headroom
+  - headroom
   - opencode:
       model: anthropic/claude-opus-4-6
       small-model: anthropic/claude-haiku-4-5
