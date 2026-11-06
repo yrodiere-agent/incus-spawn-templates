@@ -222,6 +222,19 @@ detect_sessions() {
     if ! $found; then
         echo "- No agent sessions found." >> "$out"
     fi
+
+    # PR references mentioned in any agent session (catches PRs in repos not checked out locally)
+    local pr_refs
+    pr_refs=$(iexec_user "$instance" "$user" \
+        grep -rhaoE 'https://github\.com/[^/"'"'"'[:space:]]*/pull/[0-9]+|[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+#[0-9]+' \
+        "$home/.claude/projects" "$home/.codex/sessions" 2>/dev/null \
+        | sort -u || true)
+    if [ -n "$pr_refs" ]; then
+        echo "- **PR references in sessions**:" >> "$out"
+        while IFS= read -r ref; do
+            [ -n "$ref" ] && echo "  - $ref" >> "$out"
+        done <<< "$pr_refs"
+    fi
 }
 
 # Inspect a single instance. Writes markdown to $tmpdir/$name.md.
