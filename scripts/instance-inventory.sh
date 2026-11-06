@@ -28,11 +28,33 @@ done
 
 IFS=',' read -ra ALLOWED_TEMPLATES <<< "${ISX_INVENTORY_TEMPLATES:-dev,dev-vm}"
 
+# Build template ancestry map from built Incus images so that allowing "dev"
+# also allows instances from templates that inherit from "dev".
+declare -A _tpl_parent
+while IFS=$'\t' read -r img_name img_parent; do
+    [ -n "$img_name" ] && _tpl_parent[$img_name]=$img_parent
+done < <(incus image list --format=json 2>/dev/null \
+    | jq -r '
+        .[] | select(.aliases | length > 0) |
+        (.aliases[0].name) as $name |
+        ((.properties // {})["user.incus-spawn.parent"] // "") |
+        [$name, .] | @tsv
+    ' 2>/dev/null || true)
+
 is_allowed_template() {
-    local parent="$1"
-    [ -z "$parent" ] && return 1
-    for tpl in "${ALLOWED_TEMPLATES[@]}"; do
-        [ "$parent" = "$tpl" ] && return 0
+    local tpl="$1"
+    [ -z "$tpl" ] && return 1
+    local visited=""
+    while [ -n "$tpl" ]; do
+        for allowed in "${ALLOWED_TEMPLATES[@]}"; do
+            [ "$tpl" = "$allowed" ] && return 0
+        done
+        # Guard against cycles in the parent chain
+        case " $visited " in
+            *" $tpl "*) return 1 ;;
+        esac
+        visited="$visited $tpl"
+        tpl="${_tpl_parent[$tpl]:-}"
     done
     return 1
 }
