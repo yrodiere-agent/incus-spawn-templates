@@ -28,46 +28,13 @@ done
 
 IFS=',' read -ra ALLOWED_TEMPLATES <<< "${ISX_INVENTORY_TEMPLATES:-tpl-dev,tpl-dev-vm}"
 
-# Build template ancestry map from definition files so that allowing "tpl-dev"
+# Build template ancestry map from isx so that allowing "tpl-dev"
 # also allows instances from templates that inherit from it (e.g. quarkus).
 declare -A _tpl_parent
-
-_scan_definitions() {
-    local dir="$1"
-    [ -d "$dir" ] || return
-    for yaml in "$dir"/*.yaml "$dir"/*.yml; do
-        [ -f "$yaml" ] || continue
-        local name parent
-        name=$(grep -m1 '^name:' "$yaml" 2>/dev/null | sed 's/^name:[[:space:]]*//' | tr -d "\"'")
-        parent=$(grep -m1 '^parent:' "$yaml" 2>/dev/null | sed 's/^parent:[[:space:]]*//' | tr -d "\"'")
-        [ -n "$name" ] && [ -n "$parent" ] && _tpl_parent["$name"]="$parent"
-    done
-}
-
-_scan_definitions "${XDG_CONFIG_HOME:-$HOME/.config}/incus-spawn/images"
-
-_config="${XDG_CONFIG_HOME:-$HOME/.config}/incus-spawn/config.yaml"
-if [ -f "$_config" ]; then
-    _in_sp=false
-    while IFS= read -r _line; do
-        if [[ "$_line" =~ ^searchPaths:|^search-paths: ]]; then
-            _in_sp=true; continue
-        fi
-        if $_in_sp; then
-            if [[ "$_line" =~ ^[[:space:]]*-[[:space:]]+(.*) ]]; then
-                _path="${BASH_REMATCH[1]}"
-                _path="${_path%\"}" ; _path="${_path#\"}"
-                _path="${_path%\'}" ; _path="${_path#\'}"
-                # Expand leading tilde
-                [[ "$_path" == "~/"* ]] && _path="$HOME/${_path#\~/}"
-                _scan_definitions "$_path/images"
-            elif [[ "$_line" =~ ^[^[:space:]] ]]; then
-                break
-            fi
-        fi
-    done < "$_config"
-fi
-unset _in_sp _line _path _config
+while IFS=$'\t' read -r tpl_name tpl_parent; do
+    [ -n "$tpl_name" ] && [ -n "$tpl_parent" ] && _tpl_parent[$tpl_name]=$tpl_parent
+done < <(isx templates list --format=json 2>/dev/null \
+    | jq -r '.[] | select(.parent != null) | [.name, .parent] | @tsv' 2>/dev/null || true)
 
 is_allowed_template() {
     local tpl="$1"
