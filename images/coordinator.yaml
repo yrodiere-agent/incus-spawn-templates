@@ -78,3 +78,20 @@ host-resources:
     mode: copy
 skills:
   - yrodiere/agent-skills
+coordinator:
+  control-over:
+    - hibernate-deps
+    - hibernate-infra
+    - hibernate-orm
+    - hibernate-reactive
+    - hibernate-search
+    - hibernate-validator
+    - incus-spawn
+    - incus-spawn-container
+    - quarkus
+    - quarkus-infra
+    - tamboui
+    - tools
+    - tpl-dev
+    - websites
+    - wildfly
