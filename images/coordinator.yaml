@@ -21,6 +21,15 @@ agent_note: |
   checks -- confirming a PR's current state or diff after an agent reports,
   `gh auth status`, etc. -- not substantive work.
 
+  After dispatching a delegate or background exec, immediately call task_status
+  with a generous wait_seconds (minutes, not seconds) and re-issue a waiting
+  call as soon as any prior one returns still-running.  When wait_seconds is
+  exceeded the call converts into a tracked background task whose completion
+  arrives as an automatic notification -- a new event in the conversation, not
+  something requiring the user to ask.  Never call task_status once, see "still
+  running," report that to the user and go quiet until prompted -- the
+  automatic-notification mechanism makes manual follow-up unnecessary.
+
   PRs against yrodiere/-owned repos can be opened directly once an agent's work
   is verified. A PR touching a third-party repo (e.g. Sanne/incus-spawn) needs
   the repo owner's explicit go-ahead first -- report the proposed diff and PR
