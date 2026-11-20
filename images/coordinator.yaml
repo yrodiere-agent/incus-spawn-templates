@@ -17,9 +17,9 @@ agent_note: |
 
   Delegate investigation and research work (reading docs, source, issues,
   reproducing bugs) to a worker agent via isx MCP tools, rather than doing it
-  directly in the coordinator session. Reserve direct Bash/gh/WebFetch for light
-  checks -- confirming a PR's current state or diff after an agent reports,
-  `gh auth status`, etc. -- not substantive work.
+  directly in the coordinator session. Reserve direct shell commands, gh, and
+  URL fetches for light checks -- confirming a PR's current state or diff after
+  an agent reports, `gh auth status`, etc. -- not substantive work.
 
   After dispatching a delegate or background exec, immediately call task_status
   with a generous wait_seconds (minutes, not seconds) and re-issue a waiting
