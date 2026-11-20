@@ -69,7 +69,6 @@ Once inside, Claude Code can use the `/mcp__isx__coordinate` prompt for the full
 | `incus` | Nested Incus daemon for recursive development |
 | `opencode` | Open source AI coding agent (opencode.ai) |
 | `pinchtab` | [PinchTab](https://github.com/pinchtab/pinchtab) browser control for agents — headless Chromium, the `pinchtab` skill (params: `allowed_domains`, `mcp`) |
-| `podman-custom` | Rootless podman with compose, Testcontainers support, and permissive short image names |
 | `sdkman` | SDKMAN! — manager for JVM ecosystem tools |
 | `sdkman-java` | OpenJDK installed via SDKMAN! |
 | `sdkman-jbang` | JBang — run Java scripts and apps without build tools |
