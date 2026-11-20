@@ -66,32 +66,29 @@ agent_note: |
   holding for explicit go-ahead on the first open, unless the instruction is
   unambiguous about opening immediately.
 tools:
-  # ── Coordinator front-end: opencode with Gemini ──────────────────────
+  # ── Coordinator front-end: opencode with OpenAI ─────────────────────
   # The coordinator orchestrates delegates and makes tool calls; it does not
-  # generate code itself. gemini-3.8-flash is a cheap, fast model suited for
-  # orchestration, and Gemini access is flat-cost.
+  # generate code itself. gpt-6-luna is fast and suited for orchestration.
   #
   # To revert the coordinator front-end to Claude Code:
   #   1. Uncomment the claude and headroom entries below.
   #   2. Comment out or remove the opencode entry.
   #   3. Change default-action to: claude
-  #   4. Under host-resources, uncomment the ~/.claude/CLAUDE.md copy
-  #      and comment out the ~/.config/opencode/AGENTS.md copy.
   - opencode:
-      provider: google
-      model: gemini-3.8-flash
+      provider: openai
+      model: gpt-6-luna
   # To use an Anthropic model in opencode instead:
   #   - opencode:
   #       provider: anthropic
   #       model: claude-sonnet-5-5
-  # To use an OpenAI model in opencode instead:
+  # To use a Gemini model in opencode instead:
   #   - opencode:
-  #       provider: openai
-  #       model: gpt-6-luna
+  #       provider: google
+  #       model: gemini-3.8-flash
 
   # ── Claude Code: disabled ────────────────────────────────────────────
   # Uncomment to restore Claude Code as the front-end: change
-  # default-action to claude and swap the host-resources back.
+  # default-action to claude.
   # - claude:
   #     model: claude-sonnet-5-5
   #     attribution-commit: ""
@@ -115,12 +112,11 @@ host-resources:
     path: ~/.gitconfig
     mode: copy
   - source: ~/workspaces/incus-spawn/incus-spawn-templates/files/AGENTS.md
+    path: ~/.claude/CLAUDE.md
+    mode: copy
+  - source: ~/workspaces/incus-spawn/incus-spawn-templates/files/AGENTS.md
     path: ~/.config/opencode/AGENTS.md
     mode: copy
-  # Uncomment if re-enabling Claude Code as the front-end:
-  # - source: ~/workspaces/incus-spawn/incus-spawn-templates/files/AGENTS.md
-  #   path: ~/.claude/CLAUDE.md
-  #   mode: copy
   - source: ~/.ssh/agent-authorized-keys
     path: .ssh/authorized-keys
     mode: copy
