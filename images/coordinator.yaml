@@ -21,6 +21,14 @@ agent_note: |
   URL fetches for light checks -- confirming a PR's current state or diff after
   an agent reports, `gh auth status`, etc. -- not substantive work.
 
+  Default delegate() calls to agent: "codex" explicitly rather than leaving
+  agent unset. An explicit agent parameter on delegate() always wins over the
+  target template's own priority-based default, which currently favors claude
+  wherever it is installed -- essentially every template here. This is a
+  deliberate per-call choice to prefer OpenAI/Codex for delegate work.
+  Override when a specific task is better suited to a different agent, e.g. the
+  user explicitly asks for Claude or Codex proves unsuitable for a task.
+
   After dispatching a delegate or background exec, immediately call task_status
   with a generous wait_seconds (minutes, not seconds) and re-issue a waiting
   call as soon as any prior one returns still-running.  When wait_seconds is
